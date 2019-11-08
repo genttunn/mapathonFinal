@@ -4,6 +4,7 @@ import AddForm from "./AddForm";
 import MENU_MODES from "../MenuModes";
 import POIDisplay from "./POIDisplay";
 import UserGuide from "./UserGuide";
+import AddFormCategory from "./AddFormCategory";
 class MenuSlide extends Component {
   state = {};
   handleMenuChange = state => {
@@ -13,21 +14,24 @@ class MenuSlide extends Component {
     switch (menuMode) {
       case MENU_MODES.DEFAULT:
         return (
-          <POIDisplay
-            markers={this.props.markers}
-            group={2}
-            handleFilterGroup={this.props.handleFilterGroup}
-            handleFilterUser={this.props.handleFilterUser}
-            canDeletePOI={this.props.canDeletePOI}
-            handleDeletePOI={this.props.handleDeletePOI}
-            handleShowOnMap={this.props.handleShowOnMap}
-            handleModalClose={this.props.handleModalClose}
-            handleModalShow={this.props.handleModalShow}
-            handleEditModalClose={this.props.handleEditModalClose}
-            handleEditModalShow={this.props.handleEditModalShow}
-            handleLikePOI={this.props.handleLikePOI}
-            handleUnlikePOI={this.props.handleUnlikePOI}
-          />
+            <div>
+              <POIDisplay
+                markers={this.props.markers}
+                group={2}
+                handleFilterGroup={this.props.handleFilterGroup}
+                handleFilterUser={this.props.handleFilterUser}
+                canDeletePOI={this.props.canDeletePOI}
+                handleDeletePOI={this.props.handleDeletePOI}
+                handleShowOnMap={this.props.handleShowOnMap}
+                handleModalClose={this.props.handleModalClose}
+                handleModalShow={this.props.handleModalShow}
+                handleEditModalClose={this.props.handleEditModalClose}
+                handleEditModalShow={this.props.handleEditModalShow}
+                handleLikePOI={this.props.handleLikePOI}
+                handleUnlikePOI={this.props.handleUnlikePOI}
+              />
+              <div id="correctionUI" style={{height:"60px"}}></div>
+            </div>
         );
         break;
       case MENU_MODES.USER_GUIDE:
@@ -35,17 +39,32 @@ class MenuSlide extends Component {
         break;
       case MENU_MODES.ADD_POI:
         return (
-          <div>
-            <AddForm
-              locationToAdd={this.props.locationToAdd}
-              handleForm={this.props.handleForm}
-              handleBackClick={this.props.handleBackClick}
-              categories={this.props.categories}
-            />
-          </div>
+            <div>
+              <AddForm
+                  locationToAdd={this.props.locationToAdd}
+                  handleForm={this.props.handleForm}
+                  handleBackClick={this.props.handleBackClick}
+                  categories={this.props.categories}
+              />
+              <div id="correctionUI" style={{height:"60px"}}></div>
+            </div>
+        );
+      case MENU_MODES.ADD_CATEGORY:
+        return (
+            <div>
+              <AddFormCategory
+                  handleFormCat={this.props.handleFormCategory}
+                  handleBackClick={this.props.handleBackClick}
+              />
+              <div id="correctionUI" style={{height:"60px"}}></div>
+            </div>
         );
       default:
-        return <UserGuide />;
+        return (
+            <div>
+            <UserGuide />
+              <div id="correctionUI" style={{height:"60px"}}></div>
+            </div>);
     }
   };
   render() {

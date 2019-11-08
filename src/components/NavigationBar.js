@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
-import { IoMdDownload, IoIosLogOut, IoIosLogIn } from "react-icons/io";
+import { Navbar, Nav, Button } from "react-bootstrap";
+import { IoMdDownload, IoIosLogOut, IoIosLogIn, IoMdWallet } from "react-icons/io";
 class NavigationBar extends Component {
   state = {};
   render() {
@@ -29,11 +29,18 @@ class NavigationBar extends Component {
                   <IoIosLogOut size={24} />
                 </Button>
                 <Button
-                  variant="warning"
-                  className="mr-sm-2"
-                  onClick={this.props.handleGetPOI}
+                    variant="warning"
+                    className="mr-sm-2"
+                    onClick={this.props.handleGetPOI}
                 >
                   <IoMdDownload size={24} />
+                </Button>
+                <Button
+                    variant="secondary"
+                    className="mr-sm-2"
+                    onClick={this.props.handleGetCategory}
+                >
+                  <IoMdWallet size={24} />
                 </Button>
                 <Button
                   variant="info"

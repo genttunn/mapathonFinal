@@ -21,7 +21,7 @@ export default function POICard(props) {
     liked,
     likes
   } = props.content;
-  const { Categories, Creator, Status } = props.content;
+  const { Categories, Status } = props.content;
   let statusColor;
   if (Status) {
     switch (Status.id) {

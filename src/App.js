@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { useAuth0 } from "./react-auth0-spa";
 import request from "./utils/request";
 import requestPOI from "./utils/requestPOI";
 import endpoints from "./endpoints";
 import Loading from "./components/Loading";
-import POI from "./components/POI";
 import MyMap from "./components/MyMap";
 import NavigationBar from "./components/NavigationBar";
 import MENU_MODES from "./MenuModes";
@@ -34,7 +33,6 @@ function App() {
   let handleLogin = async e => {
     e.preventDefault();
     try {
-      let token = await getTokenSilently();
       await handleGetPOI();
     } catch (e) {
       await loginWithPopup();
@@ -59,7 +57,6 @@ function App() {
     setMenu(true);
   };
   let handleGetPOI = async () => {
-    // e.preventDefault();
     setCanDeletePOI(false);
     let pois = await requestPOI.getAllPOI(getTokenSilently, loginWithPopup);
     setPois(pois);
@@ -101,6 +98,12 @@ function App() {
     handleGetCategory();
   };
 
+  let handleGetCategories = async () => {
+    // update all the marker in state
+    setMenu(true);
+    handleChangeMode(MENU_MODES.ADD_CATEGORY);
+  };
+
   let handleGetCategory = async () => {
     let categories = await request(
       `${process.env.REACT_APP_SERVER_URL}${endpoints.categories}`,
@@ -123,7 +126,7 @@ function App() {
       newContent.newPOI.categories.length > 0
     ) {
       let cat = newContent.newPOI.categories.map(myCat => myCat.id);
-      let result2 = await requestPOI.updatePOICategory(
+      await requestPOI.updatePOICategory(
         result.id,
         cat,
         getTokenSilently,
@@ -134,7 +137,6 @@ function App() {
     handleGetPOI();
   };
   let handleForm = async newPOI => {
-    let tokenForm = await getTokenSilently();
     try {
       let result = await requestPOI.addNewPOI(
         newPOI,
@@ -148,13 +150,25 @@ function App() {
         newPOI.categories.length > 0
       ) {
         let cat = newPOI.categories.map(myCat => myCat.id);
-        let result2 = await requestPOI.updatePOICategory(
+        await requestPOI.updatePOICategory(
           result.id,
           cat,
           getTokenSilently,
           loginWithPopup
         );
       }
+      setMenuMode(MENU_MODES.DEFAULT);
+      handleGetPOI();
+    } catch (error) {}
+  };
+  let handleFormCategory = async newCategory => {
+    await getTokenSilently();
+    try {
+      await requestPOI.addNewCategory(
+        newCategory,
+        getTokenSilently,
+        loginWithPopup
+      );
       setMenuMode(MENU_MODES.DEFAULT);
       handleGetPOI();
     } catch (error) {}
@@ -185,11 +199,7 @@ function App() {
     }
   };
   let handleDeletePOI = async id => {
-    let result = await requestPOI.deletePOI(
-      id,
-      getTokenSilently,
-      loginWithPopup
-    );
+    await requestPOI.deletePOI(id, getTokenSilently, loginWithPopup);
     handleGetPOI();
   };
   if (loading) {
@@ -209,15 +219,18 @@ function App() {
   };
   return (
     <div className="App">
-      <NavigationBar
-        handleLogin={handleLogin}
-        handleLogout={handleLogout}
-        toggleMenu={toggleMenu}
-        handleGetPOI={handleGetPOI}
-        isAuthenticated={isAuthenticated}
-        user={user}
-        handleOpenGuide={handleOpenGuide}
-      />
+      <div style={{ height: "60px" }}>
+        <NavigationBar
+          handleLogin={handleLogin}
+          handleLogout={handleLogout}
+          toggleMenu={toggleMenu}
+          handleGetPOI={handleGetPOI}
+          handleGetCategory={handleGetCategories}
+          isAuthenticated={isAuthenticated}
+          user={user}
+          handleOpenGuide={handleOpenGuide}
+        />
+      </div>
       <header className="App-header">
         <MyMap
           markers={markers}
@@ -229,6 +242,7 @@ function App() {
           setMenu={setMenu}
           handleMenuChange={handleMenuChange}
           handleForm={handleForm}
+          handleFormCategory={handleFormCategory}
           handleChangeMode={handleChangeMode}
           handleFilterGroup={handleFilterGroup}
           handleFilterUser={handleFilterUser}

@@ -1,19 +1,14 @@
-import React, { Component, createRef, Fragment, useState } from "react";
+import React, { Component, createRef, Fragment } from "react";
 import MENU_MODES from "../MenuModes";
-import { Map, TileLayer, Marker, Popup, ZoomControl } from "react-leaflet";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
 import { Button } from "react-bootstrap";
 import MenuSlide from "./MenuSlide";
 import Control from "@skyeer/react-leaflet-custom-control";
 import { IoMdLocate } from "react-icons/io";
-import { latLngBounds } from "leaflet";
 import POI from "./POI";
-import POICard from "./POICard";
 import POIDetail from "./POIDetail";
 import POIEdit from "./POIEdit";
 import L from "leaflet";
-import GPX from "leaflet-gpx";
-import { AntPath, antPath } from "leaflet-ant-path";
-import requestPOI from "../utils/requestPOI";
 
 type Position = [number, number];
 type Props = {|
@@ -135,6 +130,7 @@ export default class MyMap extends Component<{}, State> {
       });
     }
   };
+  /*function called when my location was found => we zoom , and show the marker*/
   handleLocationFound = (e: Object) => {
     let myVP = {};
     this.setState({
@@ -183,7 +179,12 @@ export default class MyMap extends Component<{}, State> {
     this.props.handleForm(newPOI);
     this.setState(prevState => ({ currentPointer: null }));
   };
-  /*
+  //pass newPOI to App.js and unmount current marker
+  handleFormCategory = newCategory => {
+    this.props.handleFormCategory(newCategory);
+    this.setState(prevState => ({ currentPointer: null }));
+  };
+  /* Loan ==> I have Try to make the Itenary .  Don't delete it pls.
 // add to 347 clickRoute={this.destinationFinal} and define this.state.theMap to ref the map
   destinationFinal = (content) =>{
     if(this.state.itinary.length === 0) {
@@ -248,7 +249,6 @@ export default class MyMap extends Component<{}, State> {
     */
   // discard Add Form, returns to DEFAULT menu view
   handleBackClick = () => {
-    // this.props.toggleMenu();
     this.props.handleChangeMode(MENU_MODES.DEFAULT);
     this.setState(prevState => ({ currentPointer: null }));
   };
@@ -296,59 +296,38 @@ export default class MyMap extends Component<{}, State> {
         </Marker>
       ) : null;
     return (
-      <div>
-        <MenuSlide
-          isOpen={this.props.menuState}
-          menuMode={this.props.menuMode}
-          toggleMenu={this.props.toggleMenu}
-          handleMenuChange={this.handleMenuChange}
-          locationToAdd={this.state.locationToAdd}
-          categories={this.props.categories}
-          handleForm={this.handleForm}
-          changeMode={this.props.handleChangeMode}
-          handleBackClick={this.handleBackClick}
-          markers={this.props.markers}
-          handleFilterGroup={this.props.handleFilterGroup}
-          handleFilterUser={this.props.handleFilterUser}
-          canDeletePOI={this.props.canDeletePOI}
-          handleDeletePOI={this.props.handleDeletePOI}
-          handleShowOnMap={this.handleShowOnMap}
-          handleModalClose={this.handleModalClose}
-          handleModalShow={this.handleModalShow}
-          handleEditModalClose={this.handleEditModalClose}
-          handleEditModalShow={this.handleEditModalShow}
-          handleLikePOI={this.props.handleLikePOI}
-          handleUnlikePOI={this.props.handleUnlikePOI}
-        />
+      <div style={{ height: "10%" }}>
         <Map
-          viewport={this.state.center}
+          viewport={
+            this.state
+              .center /*the center of the map (where we are actually looking)*/
+          }
           onViewportChanged={this.onViewportChanged}
           onLocationfound={this.handleLocationFound}
           zoom={this.state.zoom}
           ref={this.state.mapRef}
-          onDblClick={this.handleClick}
+          onDblClick={this.handleClick /*Open form for create the POI*/}
           doubleClickZoom={false}
           zoomControl={true}
           onMove={e => {
             e.target.closePopup();
           }}
         >
+          /*The pitcures of the map (din't need to change)*/
           <TileLayer
             maxZoom={19 /* we need both to work*/}
             minZoom={1}
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            // url="http://a51.idata.over-blog.com/0/30/04/75/Mars-2012/Le-degrade-des-violets.jpg" exemple loading
+            //we can use different map if we want : https://leaflet-extras.github.io/leaflet-providers/preview
+            // all we need its a url with an x, y and z (lat, long, zoom)
+            // url="https://dev.{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
+            // url="https://dev.{s}.tile.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"
           />
-          <Control position="topleft">
-            <Button variant="primary" onClick={this.handleSelfLocate}>
-              <div style={{ color: "white" }}>
-                <IoMdLocate size={24} />
-              </div>
-            </Button>
-          </Control>
-          {currentLocationMarker}
-          {currentPointerMarker}
-          <MarkerList
+          {currentLocationMarker /*self-location marker*/}
+          {currentPointerMarker /*add new location marker*/}
+          <MarkerList /*Create a list of marker with the POIs*/
             markers={this.props.markers}
             canDeletePOI={this.props.canDeletePOI}
             handleDeletePOI={this.props.handleDeletePOI}
@@ -359,6 +338,7 @@ export default class MyMap extends Component<{}, State> {
             handleEditModalShow={this.handleEditModalShow}
             user={this.props.user}
           />
+          /*Mia*/
           {this.state.modalPOI ? (
             <POIDetail
               modalState={this.state.modalState}
@@ -377,7 +357,39 @@ export default class MyMap extends Component<{}, State> {
               categories={this.props.categories}
             />
           ) : null}
+          /*To display the self-location button*/
+          <Control position="topleft">
+            <Button variant="primary" onClick={this.handleSelfLocate}>
+              <div style={{ color: "white" }}>
+                <IoMdLocate size={24} />
+              </div>
+            </Button>
+          </Control>
         </Map>
+        <MenuSlide
+          isOpen={this.props.menuState}
+          menuMode={this.props.menuMode}
+          toggleMenu={this.props.toggleMenu}
+          handleMenuChange={this.handleMenuChange}
+          locationToAdd={this.state.locationToAdd}
+          categories={this.props.categories}
+          handleForm={this.handleForm}
+          handleFormCategory={this.handleFormCategory}
+          changeMode={this.props.handleChangeMode}
+          handleBackClick={this.handleBackClick}
+          markers={this.props.markers}
+          handleFilterGroup={this.props.handleFilterGroup}
+          handleFilterUser={this.props.handleFilterUser}
+          canDeletePOI={this.props.canDeletePOI}
+          handleDeletePOI={this.props.handleDeletePOI}
+          handleShowOnMap={this.handleShowOnMap}
+          handleModalClose={this.handleModalClose}
+          handleModalShow={this.handleModalShow}
+          handleEditModalClose={this.handleEditModalClose}
+          handleEditModalShow={this.handleEditModalShow}
+          handleLikePOI={this.props.handleLikePOI}
+          handleUnlikePOI={this.props.handleUnlikePOI}
+        />
       </div>
     );
   }

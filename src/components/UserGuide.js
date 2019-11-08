@@ -5,9 +5,9 @@ import {
   IoIosLogOut,
   IoIosLogIn,
   IoIosInformationCircleOutline,
-  IoIosTrash
+  IoMdWallet
 } from "react-icons/io";
-import { MdFilterList, MdModeEdit } from "react-icons/md";
+import { MdFilterList } from "react-icons/md";
 import { Button, Row } from "react-bootstrap";
 
 class UserGuide extends Component {
@@ -34,6 +34,13 @@ class UserGuide extends Component {
         </div>
         <br />
         <div as={Row}>
+          <Button variant="secondary" className="mr-3">
+            <IoMdWallet size={24} />
+          </Button>
+          Add new Category
+        </div>
+        <br />
+        <div as={Row}>
           <Button variant="primary" className="mr-3">
             <div style={{ color: "white" }}>
               <IoMdLocate size={24} />
@@ -42,6 +49,7 @@ class UserGuide extends Component {
           Display current location/Recenter
         </div>
         <br />
+
         <div as={Row}>
           <Button variant="danger" className="mr-3">
             <div style={{ color: "white" }}>
@@ -66,18 +74,15 @@ class UserGuide extends Component {
         </div>
         <br />
         <div as={Row}>
-          <Button variant="danger" className="mr-3">
-            <IoIosTrash size={24} />
+          <Button variant="success">
+            Manage your POIs{" "}
+            <MdFilterList size={24} style={{ color: "white" }} />
           </Button>
-          <Button variant="warning" className="mr-3">
-            <MdModeEdit size={24} />
-          </Button>
-          Delete/Edit your POIs
         </div>
         <br />
         <div as={Row}>
-          * Can only delete/edit your own POIs. Filter for your POIs to
-          delete/edit them. Redirects to list of all POIs.
+          * Can only delete/edit your own POIs. Click on Manage your POIs to
+          start. Redirects to list of all POIs.
         </div>
         <br />
         <div as={Row}>
@@ -85,9 +90,7 @@ class UserGuide extends Component {
         </div>
         <br />
 
-        <div as={Row}>
-          * To add a POI, click on the map, then hover over the marker.
-        </div>
+        <div as={Row}>* To add a POI, double click on the map.</div>
       </div>
     );
   }

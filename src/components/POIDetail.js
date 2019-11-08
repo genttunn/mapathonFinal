@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Modal, Button } from "react-bootstrap";
-import blank from "../assets/blank.png";
 class POIDetail extends Component {
   state = {};
   handleDetailClick = state => {
@@ -8,7 +7,6 @@ class POIDetail extends Component {
   };
   render() {
     const {
-      id,
       name,
       description,
       lat,
@@ -16,10 +14,10 @@ class POIDetail extends Component {
       image,
       url,
       group,
-      createAt,
       Categories,
       Creator,
-      Status
+      Status,
+      Tags
     } = this.props.modalPOI;
     let statusColor;
     if (Status) {
@@ -52,7 +50,7 @@ class POIDetail extends Component {
             )}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflow: "hidden" }}>
           {Categories && Categories.length > 0 && (
             <div>
               {Categories.map(category => (
@@ -69,9 +67,14 @@ class POIDetail extends Component {
               <br />
             </div>
           )}
-
+          <br />
           <img className="img-fluid" alt={name} src={image} />
           <br />
+          {Status && (
+            <span className="status" style={{ color: statusColor }}>
+              <small>{Status.name}</small>
+            </span>
+          )}
           <br />
           <p>
             <strong>Description :</strong> {description}
@@ -88,6 +91,27 @@ class POIDetail extends Component {
           <p>
             <strong>Creator :</strong> {Creator.name}
           </p>
+          <hr />
+
+          {Tags && Tags.length > 0 && (
+            <>
+              <hr />
+              <div className="categories float-right">
+                {Tags.map(tag => (
+                  <span
+                    className="category tag"
+                    style={{ backgroundColor: tag.color, overflow: "hidden" }}
+                    key={tag.id}
+                  >
+                    {tag.image && (
+                      <img className="category-image" src={tag.image} />
+                    )}
+                    <small>{tag.name}</small>
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button

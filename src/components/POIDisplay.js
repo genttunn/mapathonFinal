@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import POI from "./POI";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { MdFilterList } from "react-icons/md";
 import POICard from "./POICard";
 import UserGuide from "./UserGuide";

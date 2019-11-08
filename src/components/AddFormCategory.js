@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
-import Select from '@material-ui/core/Select';
-import Chip from '@material-ui/core/Chip';
-import FormControl from '@material-ui/core/FormControl';
-import MENU_MODES from "../MenuModes";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
+import { Button } from "react-bootstrap";
 
-class AddForm extends Component {
+class AddFormCategory extends Component {
 
   constructor(props) {
     super(props);
@@ -16,12 +9,10 @@ class AddForm extends Component {
       newCategory : {
         name: "",
         image: null,
-        group: 2
+        group: 0
       }
     };
   }
-
-
   inputFieldValueChanged = event => {
     this.setState({
       newCategory: {
@@ -41,7 +32,7 @@ class AddForm extends Component {
           group: this.state.newCategory.group
         }
       }),
-      data => this.props.handleForm(this.state.newCategory)
+      data => {this.props.handleFormCat(this.state.newCategory)}
     );
     this.refs.form.reset();
   };
@@ -61,7 +52,7 @@ class AddForm extends Component {
       <React.Fragment>
         <div>
           <form ref="form">
-            <p className="h4 text-center mb-4"> Add POI </p>
+            <p className="h4 text-center mb-4"> Add Category </p>
             Name:{" "}
             <input
               id="name"
@@ -70,30 +61,38 @@ class AddForm extends Component {
               className="form-control"
             />
             <br />
-            Image:
-            <input
-              id="image"
-              type="URL"
-              onChange={this.inputFieldValueChanged}
-              className="form-control"
-            />
-            <br />
-            <p></p>
-            <input
-              className="btn btn-info"
-              type="submit"
-              onClick={this.addCategoryButtonClicked}
-              value="Submit"
-              style={{ display: "block", margin: "0 auto" }}
-            />
-            <br />
-            <Button
-              onClick={this.backButtonClicked}
-              variant="danger"
-              style={{ display: "block", margin: "0 auto" }}
-            >
-              Go back
-            </Button>
+              Image:
+              <input
+                  id="image"
+                  type="URL"
+                  onChange={this.inputFieldValueChanged}
+                  className="form-control"
+              />
+              <br />
+              Group:
+              <input
+                  id="group"
+                  type="URL"
+                  onChange={this.inputFieldValueChanged}
+                  className="form-control"
+              />
+              <br />
+              <p></p>
+              <div style={{display:"flex"}}>
+                  <Button
+                      onClick={this.backButtonClicked}
+                      variant="danger"
+                      style={{ display: "block", margin: "0 auto" }}>
+                      Go back
+                  </Button>
+                  <input
+                      className="btn btn-info"
+                      type="submit"
+                      onClick={this.addCategoryButtonClicked}
+                      value="Submit"
+                      style={{ display: "block", margin: "0 auto" }}
+                  />
+              </div>
           </form>
         </div>
       </React.Fragment>

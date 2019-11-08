@@ -4,9 +4,7 @@ import './AddForm.css'
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip';
 import FormControl from '@material-ui/core/FormControl';
-import MENU_MODES from "../MenuModes";
 import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 
 
@@ -142,7 +140,14 @@ class AddForm extends Component {
               className="form-control"
             />
             <br />
-            <p></p>
+            <div style={{display:"flex"}}>
+            <Button
+                onClick={this.backButtonClicked}
+                variant="danger"
+                style={{ display: "block", margin: "0 auto" }}
+            >
+              Go back
+            </Button>
             <input
               className="btn btn-info"
               type="submit"
@@ -150,14 +155,7 @@ class AddForm extends Component {
               value="Submit"
               style={{ display: "block", margin: "0 auto" }}
             />
-            <br />
-            <Button
-              onClick={this.backButtonClicked}
-              variant="danger"
-              style={{ display: "block", margin: "0 auto" }}
-            >
-              Go back
-            </Button>
+            </div>
           </form>
         </div>
       </React.Fragment>

@@ -4,9 +4,7 @@ import "./AddForm.css";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
 import FormControl from "@material-ui/core/FormControl";
-import MENU_MODES from "../MenuModes";
 import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 class POIEdit extends Component {
   constructor(props) {
@@ -56,17 +54,11 @@ class POIEdit extends Component {
   };
   render() {
     const {
-      id,
       name,
       description,
-      lat,
-      lng,
       image,
       url,
       group,
-      createAt,
-      Categories,
-      Creator,
       Status
     } = this.props.modalEditPOI;
     let statusColor;

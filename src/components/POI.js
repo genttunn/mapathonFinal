@@ -1,12 +1,12 @@
 import React from "react";
 import "./POI.css";
-import { IoIosTrash, IoIosInformationCircleOutline } from "react-icons/io";
+import { IoIosTrash } from "react-icons/io";
 import { MdModeEdit } from "react-icons/md";
 import { Button, Row } from "react-bootstrap";
 
 export default function POI(props) {
-  const { name, description, lat, lng, image, url } = props.content;
-  const { Categories, Tags, User, Status } = props.content;
+  const { name, description, image, url } = props.content;
+  const { Categories, Tags, Status } = props.content;
   let statusColor;
   if (Status) {
     switch (Status.id) {
@@ -23,11 +23,11 @@ export default function POI(props) {
   }
   return (
     <div className="poi" style={{ borderColor: statusColor }}>
-      {/* {Status && (
+      {Status && (
         <span className="status" style={{ color: statusColor }}>
           <small>{Status.name}</small>
         </span>
-      )} */}
+      )}
       {Categories && Categories.length > 0 && (
         <div className="categories">
           {Categories.map(category => (
@@ -65,7 +65,11 @@ export default function POI(props) {
       )}
       <br />
       <br />
-        <section>{description.length > 300 ? description.slice(0,300)+" (...)":description}</section>
+      <section>
+        {description.length > 300
+          ? description.slice(0, 300) + " (...)"
+          : description}
+      </section>
       <br />
       {Tags && Tags.length > 0 && (
         <>
@@ -74,7 +78,7 @@ export default function POI(props) {
             {Tags.map(tag => (
               <span
                 className="category tag"
-                style={{ backgroundColor: tag.color }}
+                style={{ backgroundColor: tag.color, overflow: "hidden" }}
                 key={tag.id}
               >
                 {tag.image && (
