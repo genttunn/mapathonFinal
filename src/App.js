@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { useAuth0 } from "./react-auth0-spa";
 import request from "./utils/request";
@@ -57,7 +57,6 @@ function App() {
     setMenu(true);
   };
   let handleGetPOI = async () => {
-    setCanDeletePOI(false);
     let pois = await requestPOI.getAllPOI(getTokenSilently, loginWithPopup);
     setPois(pois);
     let markers = [];
@@ -89,10 +88,18 @@ function App() {
           icon: icon
         }
       });
-      setMenuMode(MENU_MODES.DEFAULT);
     }
     // update all the marker in state
-    setMarkers(markers);
+    setMenuMode(MENU_MODES.DEFAULT);
+    // If user mode is on, filter only the user POIS
+    if (canDeletePOI) {
+      let filteredMarkers = markers.filter(
+        markers => markers.content.poi.Creator.email == user.email
+      );
+      setMarkers(filteredMarkers);
+    } else {
+      setMarkers(markers);
+    }
     setPrevMarkers(markers);
     setMenu(true);
     handleGetCategory();
@@ -189,15 +196,25 @@ function App() {
       setMarkers(filteredMarkers);
     }
   };
+
+  //Toggle user mode (can delete/edit poi)
   let handleFilterUser = () => {
-    setCanDeletePOI(true);
-    if (prevMarkers && prevMarkers.length > 0) {
-      let filteredMarkers = prevMarkers.filter(
-        prevMarkers => prevMarkers.content.poi.Creator.email == user.email
-      );
-      setMarkers(filteredMarkers);
-    }
+    setCanDeletePOI(!canDeletePOI);
   };
+  // handles user mode
+  useEffect(() => {
+    if (canDeletePOI) {
+      if (prevMarkers && prevMarkers.length > 0) {
+        let filteredMarkers = prevMarkers.filter(
+          prevMarkers => prevMarkers.content.poi.Creator.email == user.email
+        );
+        setMarkers(filteredMarkers);
+      }
+    } else {
+      handleGetPOI();
+    }
+  }, [canDeletePOI]);
+
   let handleDeletePOI = async id => {
     await requestPOI.deletePOI(id, getTokenSilently, loginWithPopup);
     handleGetPOI();

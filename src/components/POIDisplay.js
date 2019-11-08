@@ -112,12 +112,7 @@ class POIDisplay extends Component {
                     variant="success"
                     onClick={this.props.handleFilterUser}
                   >
-                    Manage your POIs{" "}
-                    <MdFilterList
-                      size={24}
-                      style={{ color: "white" }}
-                      className="ml-2 float-right"
-                    />
+                    User Mode: {this.props.canDeletePOI ? "ON" : "OFF"}
                   </Button>
                 </Form.Label>
               </fieldset>

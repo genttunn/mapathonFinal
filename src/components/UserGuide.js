@@ -74,15 +74,11 @@ class UserGuide extends Component {
         </div>
         <br />
         <div as={Row}>
-          <Button variant="success">
-            Manage your POIs{" "}
-            <MdFilterList size={24} style={{ color: "white" }} />
-          </Button>
+          <Button variant="success">User Mode: ON/OFF</Button>
         </div>
         <br />
         <div as={Row}>
-          * Can only delete/edit your own POIs. Click on Manage your POIs to
-          start. Redirects to list of all POIs.
+          * Can only delete/edit your own POIs. Toggle User Mode to start.
         </div>
         <br />
         <div as={Row}>
