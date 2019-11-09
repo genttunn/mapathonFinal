@@ -4,8 +4,7 @@ import {
   IoMdDownload,
   IoIosLogOut,
   IoIosLogIn,
-  IoIosInformationCircleOutline,
-  IoMdWallet
+  IoIosInformationCircleOutline
 } from "react-icons/io";
 import { MdFilterList } from "react-icons/md";
 import { Button, Row } from "react-bootstrap";
@@ -31,13 +30,6 @@ class UserGuide extends Component {
             <IoMdDownload size={24} />
           </Button>
           Retrieve/Refresh & Display POIs
-        </div>
-        <br />
-        <div as={Row}>
-          <Button variant="secondary" className="mr-3">
-            <IoMdWallet size={24} />
-          </Button>
-          Add new Category
         </div>
         <br />
         <div as={Row}>

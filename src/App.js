@@ -13,6 +13,7 @@ import L from "leaflet";
 function App() {
   let [pois, setPois] = useState([]);
   let [categories, setCategories] = useState([]);
+  let [tags, setTags] = useState([]);
   let [markers, setMarkers] = useState([]);
   let [prevMarkers, setPrevMarkers] = useState([]);
   let [canDeletePOI, setCanDeletePOI] = useState(false);
@@ -94,7 +95,7 @@ function App() {
     // If user mode is on, filter only the user POIS
     if (canDeletePOI) {
       let filteredMarkers = markers.filter(
-        markers => markers.content.poi.Creator.email == user.email
+        markers => markers.content.poi.Creator.email === user.email
       );
       setMarkers(filteredMarkers);
     } else {
@@ -103,14 +104,43 @@ function App() {
     setPrevMarkers(markers);
     setMenu(true);
     handleGetCategory();
+    handleGetTags();
   };
-
+  let handleTagMenu = async () => {
+    setMenu(true);
+    handleChangeMode(MENU_MODES.ADD_TAGS);
+  };
+  let handleGetTags = async () => {
+    let tags = await requestPOI.getAllTags(getTokenSilently, loginWithPopup);
+    setTags(tags);
+  };
+  let handleFormTag = async newTag => {
+    await getTokenSilently();
+    try {
+      await requestPOI.addNewTag(newTag, getTokenSilently, loginWithPopup);
+      await handleGetTags();
+    } catch (error) {}
+  };
+  let handleDeleteTag = async tagId => {
+    await requestPOI.deleteTag(tagId, getTokenSilently, loginWithPopup);
+    handleGetTags();
+  };
   let handleGetCategories = async () => {
     // update all the marker in state
     setMenu(true);
     handleChangeMode(MENU_MODES.ADD_CATEGORY);
   };
-
+  let handleFormCategory = async newCategory => {
+    await getTokenSilently();
+    try {
+      await requestPOI.addNewCategory(
+        newCategory,
+        getTokenSilently,
+        loginWithPopup
+      );
+      handleGetCategory();
+    } catch (error) {}
+  };
   let handleGetCategory = async () => {
     let categories = await request(
       `${process.env.REACT_APP_SERVER_URL}${endpoints.categories}`,
@@ -140,6 +170,20 @@ function App() {
         loginWithPopup
       );
     }
+    if (
+      result &&
+      result.id &&
+      newContent.newPOI.tags &&
+      newContent.newPOI.tags.length > 0
+    ) {
+      let tag = newContent.newPOI.tags.map(myTag => myTag.id);
+      await requestPOI.updatePOITag(
+        result.id,
+        tag,
+        getTokenSilently,
+        loginWithPopup
+      );
+    }
     setMenuMode(MENU_MODES.DEFAULT);
     handleGetPOI();
   };
@@ -164,23 +208,28 @@ function App() {
           loginWithPopup
         );
       }
-      setMenuMode(MENU_MODES.DEFAULT);
-      handleGetPOI();
-    } catch (error) {}
-  };
-  let handleFormCategory = async newCategory => {
-    await getTokenSilently();
-    try {
-      await requestPOI.addNewCategory(
-        newCategory,
-        getTokenSilently,
-        loginWithPopup
-      );
+      if (result && result.id && newPOI.tags && newPOI.tags.length > 0) {
+        let tag = newPOI.tags.map(myTag => myTag.id);
+        await requestPOI.updatePOITag(
+          result.id,
+          tag,
+          getTokenSilently,
+          loginWithPopup
+        );
+      }
       setMenuMode(MENU_MODES.DEFAULT);
       handleGetPOI();
     } catch (error) {}
   };
 
+  let deleteCategory = async idCategory => {
+    await requestPOI.deleteCategory(
+      idCategory,
+      getTokenSilently,
+      loginWithPopup
+    );
+    handleGetCategory();
+  };
   let handleMenuChange = isOpen => {
     setMenuState(isOpen);
   };
@@ -191,7 +240,7 @@ function App() {
     setCanDeletePOI(false);
     if (prevMarkers && prevMarkers.length > 0) {
       let filteredMarkers = prevMarkers.filter(
-        prevMarkers => prevMarkers.content.poi.group == group
+        prevMarkers => prevMarkers.content.poi.group === group
       );
       setMarkers(filteredMarkers);
     }
@@ -206,12 +255,14 @@ function App() {
     if (canDeletePOI) {
       if (prevMarkers && prevMarkers.length > 0) {
         let filteredMarkers = prevMarkers.filter(
-          prevMarkers => prevMarkers.content.poi.Creator.email == user.email
+          prevMarkers => prevMarkers.content.poi.Creator.email === user.email
         );
         setMarkers(filteredMarkers);
       }
     } else {
-      handleGetPOI();
+      if (!loading) {
+        handleGetPOI();
+      }
     }
   }, [canDeletePOI]);
 
@@ -222,7 +273,7 @@ function App() {
   if (loading) {
     return <Loading />;
   }
-  if (markers.length == 0 && isAuthenticated && !loadingMarkers) {
+  if (markers.length === 0 && isAuthenticated && !loadingMarkers) {
     setLoaddingMarkers(true);
     handleGetPOI();
   }
@@ -243,6 +294,7 @@ function App() {
           toggleMenu={toggleMenu}
           handleGetPOI={handleGetPOI}
           handleGetCategory={handleGetCategories}
+          handleTagMenu={handleTagMenu}
           isAuthenticated={isAuthenticated}
           user={user}
           handleOpenGuide={handleOpenGuide}
@@ -252,11 +304,13 @@ function App() {
         <MyMap
           markers={markers}
           categories={categories}
+          tags={tags}
           menuState={menuState}
           menuMode={menuMode}
           isAuthenticated={isAuthenticated}
           toggleMenu={toggleMenu}
           setMenu={setMenu}
+          handleGetPOI={handleGetPOI}
           handleMenuChange={handleMenuChange}
           handleForm={handleForm}
           handleFormCategory={handleFormCategory}
@@ -268,6 +322,10 @@ function App() {
           handleEditForm={handleEditForm}
           handleLikePOI={handleLikePOI}
           handleUnlikePOI={handleUnlikePOI}
+          deleteCategory={deleteCategory}
+          user={user}
+          handleFormTag={handleFormTag}
+          handleDeleteTag={handleDeleteTag}
         />
       </header>
     </div>

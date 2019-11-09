@@ -249,6 +249,7 @@ export default class MyMap extends Component<{}, State> {
     */
   // discard Add Form, returns to DEFAULT menu view
   handleBackClick = () => {
+    // this.props.handleGetPOI();
     this.props.handleChangeMode(MENU_MODES.DEFAULT);
     this.setState(prevState => ({ currentPointer: null }));
   };
@@ -295,6 +296,7 @@ export default class MyMap extends Component<{}, State> {
           </Popup>
         </Marker>
       ) : null;
+
     return (
       <div style={{ height: "10%" }}>
         <Map
@@ -355,6 +357,7 @@ export default class MyMap extends Component<{}, State> {
               handleEditModalShow={this.handleEditModalShow}
               handleEditForm={this.props.handleEditForm}
               categories={this.props.categories}
+              tags={this.props.tags}
             />
           ) : null}
           /*To display the self-location button*/
@@ -373,6 +376,7 @@ export default class MyMap extends Component<{}, State> {
           handleMenuChange={this.handleMenuChange}
           locationToAdd={this.state.locationToAdd}
           categories={this.props.categories}
+          tags={this.props.tags}
           handleForm={this.handleForm}
           handleFormCategory={this.handleFormCategory}
           changeMode={this.props.handleChangeMode}
@@ -389,6 +393,10 @@ export default class MyMap extends Component<{}, State> {
           handleEditModalShow={this.handleEditModalShow}
           handleLikePOI={this.props.handleLikePOI}
           handleUnlikePOI={this.props.handleUnlikePOI}
+          user={this.props.user}
+          deleteCategory={this.props.deleteCategory}
+          handleFormTag={this.props.handleFormTag}
+          handleDeleteTag={this.props.handleDeleteTag}
         />
       </div>
     );

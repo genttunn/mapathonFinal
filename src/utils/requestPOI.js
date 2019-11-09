@@ -99,7 +99,34 @@ export class requestPOI {
       return await response.json();
     } catch (e) {
       console.error(e);
-      await loginWithPopup;
+      // await loginWithPopup;
+      return null;
+    }
+  }
+  static async updatePOITag(id, tag, getTokenSilently, loginWithPopup) {
+    try {
+      let token = await getTokenSilently();
+      console.log(
+        JSON.stringify(`${process.env.REACT_APP_SERVER_URL}/poi/` + id + `/tag`)
+      );
+      console.log(JSON.stringify(tag));
+      let response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/poi/` + id + `/tag`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(tag),
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      return await response.json();
+    } catch (e) {
+      console.error(e);
+      // await loginWithPopup;
       return null;
     }
   }
@@ -122,7 +149,7 @@ export class requestPOI {
       return await response.json();
     } catch (e) {
       console.error(e);
-      await loginWithPopup();
+      // await loginWithPopup();
       return null;
     }
   }
@@ -164,7 +191,7 @@ export class requestPOI {
       return await response.json();
     } catch (e) {
       console.error(e);
-      await loginWithPopup();
+      // await loginWithPopup();
     }
   }
   //Delete a POI in the Database
@@ -211,6 +238,88 @@ export class requestPOI {
       console.error(e);
       await loginWithPopup();
       return null;
+    }
+  }
+  static async deleteCategory(id, getTokenSilently, loginWithPopup) {
+    try {
+      let token = await getTokenSilently();
+      let response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/category/` + id,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      let data = await response.json();
+      return data;
+    } catch (e) {
+      console.error(e);
+      await loginWithPopup();
+    }
+  }
+  static async getAllTags(getTokenSilently, loginWithPopup) {
+    try {
+      let token = await getTokenSilently();
+      let response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tag`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      let data = await response.json();
+      return data;
+    } catch (e) {
+      console.error(e);
+      await loginWithPopup();
+    }
+  }
+
+  static async addNewTag(newTag, getTokenSilently, loginWithPopup) {
+    try {
+      let token = await getTokenSilently();
+      let response = await fetch(`${process.env.REACT_APP_SERVER_URL}/tag`, {
+        method: "POST",
+        body: JSON.stringify(newTag),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return await response.json();
+    } catch (e) {
+      console.error(e);
+      await loginWithPopup();
+      return null;
+    }
+  }
+  static async deleteTag(id, getTokenSilently, loginWithPopup) {
+    try {
+      let token = await getTokenSilently();
+      let response = await fetch(
+        `${process.env.REACT_APP_SERVER_URL}/tag/` + id,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      let data = await response.json();
+      return data;
+    } catch (e) {
+      console.error(e);
+      await loginWithPopup();
     }
   }
   /*   for get the route

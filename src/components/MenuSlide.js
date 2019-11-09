@@ -5,6 +5,9 @@ import MENU_MODES from "../MenuModes";
 import POIDisplay from "./POIDisplay";
 import UserGuide from "./UserGuide";
 import AddFormCategory from "./AddFormCategory";
+import CatCard from "./CatCard";
+import TagCard from "./TagCard";
+import AddFormTag from "./AddFormTag";
 class MenuSlide extends Component {
   state = {};
   handleMenuChange = state => {
@@ -14,57 +17,86 @@ class MenuSlide extends Component {
     switch (menuMode) {
       case MENU_MODES.DEFAULT:
         return (
-            <div>
-              <POIDisplay
-                markers={this.props.markers}
-                group={2}
-                handleFilterGroup={this.props.handleFilterGroup}
-                handleFilterUser={this.props.handleFilterUser}
-                canDeletePOI={this.props.canDeletePOI}
-                handleDeletePOI={this.props.handleDeletePOI}
-                handleShowOnMap={this.props.handleShowOnMap}
-                handleModalClose={this.props.handleModalClose}
-                handleModalShow={this.props.handleModalShow}
-                handleEditModalClose={this.props.handleEditModalClose}
-                handleEditModalShow={this.props.handleEditModalShow}
-                handleLikePOI={this.props.handleLikePOI}
-                handleUnlikePOI={this.props.handleUnlikePOI}
-              />
-              <div id="correctionUI" style={{height:"60px"}}></div>
-            </div>
+          <div>
+            <POIDisplay
+              markers={this.props.markers}
+              group={2}
+              handleFilterGroup={this.props.handleFilterGroup}
+              handleFilterUser={this.props.handleFilterUser}
+              canDeletePOI={this.props.canDeletePOI}
+              handleDeletePOI={this.props.handleDeletePOI}
+              handleShowOnMap={this.props.handleShowOnMap}
+              handleModalClose={this.props.handleModalClose}
+              handleModalShow={this.props.handleModalShow}
+              handleEditModalClose={this.props.handleEditModalClose}
+              handleEditModalShow={this.props.handleEditModalShow}
+              handleLikePOI={this.props.handleLikePOI}
+              handleUnlikePOI={this.props.handleUnlikePOI}
+            />
+            <div id="correctionUI" style={{ height: "60px" }}></div>
+          </div>
         );
-        break;
       case MENU_MODES.USER_GUIDE:
         return <UserGuide />;
-        break;
       case MENU_MODES.ADD_POI:
         return (
-            <div>
-              <AddForm
-                  locationToAdd={this.props.locationToAdd}
-                  handleForm={this.props.handleForm}
-                  handleBackClick={this.props.handleBackClick}
-                  categories={this.props.categories}
-              />
-              <div id="correctionUI" style={{height:"60px"}}></div>
-            </div>
+          <div>
+            <AddForm
+              locationToAdd={this.props.locationToAdd}
+              handleForm={this.props.handleForm}
+              handleBackClick={this.props.handleBackClick}
+              categories={this.props.categories}
+              tags={this.props.tags}
+            />
+            <div id="correctionUI" style={{ height: "60px" }}></div>
+          </div>
         );
       case MENU_MODES.ADD_CATEGORY:
         return (
-            <div>
-              <AddFormCategory
-                  handleFormCat={this.props.handleFormCategory}
-                  handleBackClick={this.props.handleBackClick}
+          <div>
+            <AddFormCategory
+              handleFormCat={this.props.handleFormCategory}
+              handleBackClick={this.props.handleBackClick}
+            />
+            <br />
+            {this.props.categories.map(cat => (
+              <CatCard
+                key={cat.id}
+                categories={cat}
+                user={this.props.user}
+                deleteCategory={this.props.deleteCategory}
               />
-              <div id="correctionUI" style={{height:"60px"}}></div>
-            </div>
+            ))}
+            <div id="correctionUI" style={{ height: "60px" }}></div>
+          </div>
+        );
+      case MENU_MODES.ADD_TAGS:
+        return (
+          <div>
+            <AddFormTag
+              handleFormTag={this.props.handleFormTag}
+              handleBackClick={this.props.handleBackClick}
+            />
+            <div id="correctionUI" style={{ height: "60px" }}></div>
+            {this.props.tags &&
+              this.props.tags.map(tag => (
+                <TagCard
+                  key={tag.id}
+                  tag={tag}
+                  user={this.props.user}
+                  handleDeleteTag={this.props.handleDeleteTag}
+                />
+              ))}
+            <div id="correctionUI" style={{ height: "60px" }}></div>
+          </div>
         );
       default:
         return (
-            <div>
+          <div>
             <UserGuide />
-              <div id="correctionUI" style={{height:"60px"}}></div>
-            </div>);
+            <div id="correctionUI" style={{ height: "60px" }}></div>
+          </div>
+        );
     }
   };
   render() {

@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 
 class AddFormCategory extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      newCategory : {
+      newCategory: {
         name: "",
         image: null,
         group: 0
@@ -32,7 +31,9 @@ class AddFormCategory extends Component {
           group: this.state.newCategory.group
         }
       }),
-      data => {this.props.handleFormCat(this.state.newCategory)}
+      data => {
+        this.props.handleFormCat(this.state.newCategory);
+      }
     );
     this.refs.form.reset();
   };
@@ -43,7 +44,7 @@ class AddFormCategory extends Component {
 
   handleChange = event => {
     this.setState({
-      myCategory:event.target.value
+      myCategory: event.target.value
     });
   };
 
@@ -59,40 +60,43 @@ class AddFormCategory extends Component {
               type="text"
               onChange={this.inputFieldValueChanged}
               className="form-control"
+              required
             />
             <br />
-              Image:
+            Image:
+            <input
+              id="image"
+              type="URL"
+              onChange={this.inputFieldValueChanged}
+              className="form-control"
+            />
+            <br />
+            Group:
+            <input
+              id="group"
+              type="number"
+              onChange={this.inputFieldValueChanged}
+              className="form-control"
+              required
+            />
+            <br />
+            <p></p>
+            <div style={{ display: "flex" }}>
+              <Button
+                onClick={this.backButtonClicked}
+                variant="danger"
+                style={{ display: "block", margin: "0 auto" }}
+              >
+                Go back
+              </Button>
               <input
-                  id="image"
-                  type="URL"
-                  onChange={this.inputFieldValueChanged}
-                  className="form-control"
+                className="btn btn-info"
+                type="submit"
+                onClick={this.addCategoryButtonClicked}
+                value="Submit"
+                style={{ display: "block", margin: "0 auto" }}
               />
-              <br />
-              Group:
-              <input
-                  id="group"
-                  type="URL"
-                  onChange={this.inputFieldValueChanged}
-                  className="form-control"
-              />
-              <br />
-              <p></p>
-              <div style={{display:"flex"}}>
-                  <Button
-                      onClick={this.backButtonClicked}
-                      variant="danger"
-                      style={{ display: "block", margin: "0 auto" }}>
-                      Go back
-                  </Button>
-                  <input
-                      className="btn btn-info"
-                      type="submit"
-                      onClick={this.addCategoryButtonClicked}
-                      value="Submit"
-                      style={{ display: "block", margin: "0 auto" }}
-                  />
-              </div>
+            </div>
           </form>
         </div>
       </React.Fragment>

@@ -34,12 +34,14 @@ export default function POICard(props) {
       case 3:
         statusColor = "green";
         break;
+      default:
+        statusColor = "red";
     }
   }
   return (
     <Col>
-      <Card style={{ width: "22rem" }}>
-        <Card.Img className="img-fluid" src={image} />
+      <Card style={{ width: "100%", margin: "0 auto" }}>
+        <Card.Img className="img-fluid" src={image} alt="TBA" />
 
         <Card.Body>
           {Categories && Categories.length > 0 && (
@@ -50,6 +52,7 @@ export default function POICard(props) {
                     <img
                       src={category.image}
                       style={{ width: 24, height: 24 }}
+                      alt=""
                     />
                   )}
                   <small> {category.name}</small>

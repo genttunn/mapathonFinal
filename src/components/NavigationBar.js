@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Navbar, Nav, Button } from "react-bootstrap";
-import { IoMdDownload, IoIosLogOut, IoIosLogIn, IoMdWallet } from "react-icons/io";
+import { Navbar, Nav, Button, NavDropdown } from "react-bootstrap";
+import { IoMdDownload, IoIosLogOut, IoIosLogIn } from "react-icons/io";
 class NavigationBar extends Component {
   state = {};
   render() {
@@ -14,9 +14,26 @@ class NavigationBar extends Component {
               <Nav.Link href="https://github.com/roger-schaer/mapathon">
                 Source Repository
               </Nav.Link>
+
               <Nav.Link href={""} onClick={this.props.handleOpenGuide}>
                 User Guide
               </Nav.Link>
+              {this.props.isAuthenticated ? (
+                <NavDropdown title="Manage" id="basic-nav-dropdown">
+                  <NavDropdown.Item
+                    href={""}
+                    onClick={this.props.handleGetCategory}
+                  >
+                    Categories
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    href={""}
+                    onClick={this.props.handleTagMenu}
+                  >
+                    Tags
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : null}
             </Nav>
             {this.props.isAuthenticated ? (
               <div>
@@ -29,18 +46,11 @@ class NavigationBar extends Component {
                   <IoIosLogOut size={24} />
                 </Button>
                 <Button
-                    variant="warning"
-                    className="mr-sm-2"
-                    onClick={this.props.handleGetPOI}
+                  variant="warning"
+                  className="mr-sm-2"
+                  onClick={this.props.handleGetPOI}
                 >
                   <IoMdDownload size={24} />
-                </Button>
-                <Button
-                    variant="secondary"
-                    className="mr-sm-2"
-                    onClick={this.props.handleGetCategory}
-                >
-                  <IoMdWallet size={24} />
                 </Button>
                 <Button
                   variant="info"

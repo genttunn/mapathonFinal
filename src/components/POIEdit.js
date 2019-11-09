@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import "./AddForm.css";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
@@ -13,6 +13,8 @@ class POIEdit extends Component {
       poiId: this.props.modalEditPOI.id,
       Category: this.props.categories || [],
       myCategory: [],
+      Tag: this.props.tags || [],
+      myTag: [],
       newPOI: {}
     };
   }
@@ -24,7 +26,6 @@ class POIEdit extends Component {
         [event.target.id]: event.target.value
       }
     });
-    console.log(this.state.newPOI);
   };
   editPOIButtonClicked = event => {
     event.preventDefault();
@@ -32,12 +33,12 @@ class POIEdit extends Component {
       poiId: this.props.modalEditPOI.id,
       newPOI: this.state.newPOI
     };
-    console.log(this.state.myCategory);
+
     this.props.handleEditForm(newContent);
     this.refs.form.reset();
     this.props.handleEditModalClose();
   };
-  handleChange = event => {
+  handleCatChange = event => {
     this.setState(
       {
         myCategory: event.target.value
@@ -52,29 +53,23 @@ class POIEdit extends Component {
       }
     );
   };
-  render() {
-    const {
-      name,
-      description,
-      image,
-      url,
-      group,
-      Status
-    } = this.props.modalEditPOI;
-    let statusColor;
-    if (Status) {
-      switch (Status.id) {
-        case 1:
-          statusColor = "red";
-          break;
-        case 2:
-          statusColor = "orange";
-          break;
-        case 3:
-          statusColor = "green";
-          break;
+  handleTagChange = event => {
+    this.setState(
+      {
+        myTag: event.target.value
+      },
+      () => {
+        this.setState({
+          newPOI: {
+            ...this.state.newPOI,
+            tags: this.state.myTag
+          }
+        });
       }
-    }
+    );
+  };
+  render() {
+    const { name, description, image, url, group } = this.props.modalEditPOI;
 
     return (
       <Modal
@@ -106,7 +101,7 @@ class POIEdit extends Component {
                     id="demo-mutiple-chip"
                     multiple
                     value={this.state.myCategory}
-                    onChange={this.handleChange}
+                    onChange={this.handleCatChange}
                     input={<Input id="select-multiple-chip" />}
                     renderValue={selected => (
                       <div className="chips">
@@ -123,6 +118,49 @@ class POIEdit extends Component {
                     {this.state.Category.map(cat => (
                       <MenuItem key={cat.id} value={cat}>
                         {cat.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <br />
+                Tags :{" "}
+                <FormControl className="formControl">
+                  <Select
+                    labelWidth={"200px"}
+                    labelId="demo-mutiple-chip-label"
+                    id="demo-mutiple-chip"
+                    multiple
+                    value={this.state.myTag}
+                    onChange={this.handleTagChange}
+                    input={<Input id="select-multiple-chip" />}
+                    renderValue={selected => (
+                      <div className="chips">
+                        {selected.map(tag => (
+                          <Chip
+                            key={tag.id}
+                            label={tag.name}
+                            className="chip"
+                          />
+                        ))}
+                      </div>
+                    )}
+                  >
+                    {this.state.Tag.map(tag => (
+                      <MenuItem
+                        key={tag.id}
+                        value={tag}
+                        style={{ overflow: "hidden", maxWidth: 200 }}
+                      >
+                        <span
+                          style={{
+                            backgroundColor: tag.color,
+                            borderRadius: "10px",
+                            color: "black",
+                            padding: "0.25em"
+                          }}
+                        >
+                          <small>{tag.name}</small>
+                        </span>
                       </MenuItem>
                     ))}
                   </Select>

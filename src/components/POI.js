@@ -19,6 +19,8 @@ export default function POI(props) {
       case 3:
         statusColor = "green";
         break;
+      default:
+        statusColor = "red";
     }
   }
   return (
@@ -37,6 +39,7 @@ export default function POI(props) {
                   className="category-image"
                   src={category.image}
                   style={{ width: 24, height: 24 }}
+                  alt=""
                 />
               )}
               <small> {category.name}</small>
@@ -82,7 +85,7 @@ export default function POI(props) {
                 key={tag.id}
               >
                 {tag.image && (
-                  <img className="category-image" src={tag.image} />
+                  <img className="category-image" src={tag.image} alt="" />
                 )}
                 <small>{tag.name}</small>
               </span>

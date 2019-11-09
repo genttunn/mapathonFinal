@@ -31,6 +31,8 @@ class POIDetail extends Component {
         case 3:
           statusColor = "green";
           break;
+        default:
+          statusColor = "red";
       }
     }
     return (
@@ -59,6 +61,7 @@ class POIDetail extends Component {
                     <img
                       src={category.image}
                       style={{ width: 24, height: 24 }}
+                      alt=""
                     />
                   )}
                   <small> {category.name}</small>
@@ -104,7 +107,7 @@ class POIDetail extends Component {
                     key={tag.id}
                   >
                     {tag.image && (
-                      <img className="category-image" src={tag.image} />
+                      <img className="category-image" src={tag.image} alt="" />
                     )}
                     <small>{tag.name}</small>
                   </span>

@@ -35,7 +35,7 @@ class POIDisplay extends Component {
 
     return (
       <div>
-        {this.props.markers == 0 ? (
+        {this.props.markers === 0 ? (
           <UserGuide />
         ) : (
           <div>
