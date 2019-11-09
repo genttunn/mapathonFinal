@@ -78,6 +78,7 @@ export default function POICard(props) {
               }}
             />
           </Button>
+
           <Button
             variant="primary"
             className="mr-sm-2 float-right"
