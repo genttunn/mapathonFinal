@@ -1,5 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), Leaflet, and Bootstrap.
-Forked from final release of team's repo ( AgronAsani/mapathon-2) and added some additional features in personal-update-nghi branch.
+Forked from final release of team's repo (AgronAsani/mapathon-2) and added some additional features in personal-update-nghi branch.
 
 ## Available Scripts
 
